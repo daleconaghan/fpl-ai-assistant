@@ -1,0 +1,273 @@
+# FPL AI Assistant Configuration
+
+# FPL Game Rules & Constraints
+fpl_rules:
+  budget: 100.0  # £100 million budget
+  squad_size: 15
+  starting_xi: 11
+  
+  positions:
+    goalkeeper: 
+      min: 2
+      max: 2
+    defender:
+      min: 5
+      max: 5
+    midfielder:
+      min: 5
+      max: 5
+    forward:
+      min: 3
+      max: 3
+  
+  team_constraints:
+    max_players_per_team: 3
+  
+  transfers:
+    free_transfers_per_week: 1
+    transfer_cost: 4  # points
+    wildcard_gameweeks: [2, 16]  # typically when wildcards available
+  
+  chips:
+    bench_boost: 1
+    triple_captain: 1
+    free_hit: 1
+
+# FPL Scoring System
+scoring:
+  goals:
+    goalkeeper: 6
+    defender: 6
+    midfielder: 5
+    forward: 4
+  
+  assists: 3
+  
+  clean_sheets:
+    goalkeeper: 4
+    defender: 4
+    midfielder: 1
+    forward: 0
+  
+  appearances:
+    minutes_threshold: 60
+    less_than_60: 1
+    more_than_60: 2
+  
+  penalties:
+    yellow_card: -1
+    red_card: -3
+    own_goal: -2
+    penalty_miss: -2
+    goals_conceded_gk_def: -1  # per 2 goals
+
+# Data Sources
+api_endpoints:
+  fpl_official:
+    base_url: "https://fantasy.premierleague.com/api"
+    endpoints:
+      bootstrap: "/bootstrap-static/"
+      fixtures: "/fixtures/"
+      player_history: "/element-summary/{player_id}/"
+      gameweek_live: "/event/{gameweek}/live/"
+      league_standings: "/leagues-classic/{league_id}/standings/"
+  
+  understat:
+    base_url: "https://understat.com"
+    delay: 2  # seconds between requests
+  
+  premier_league:
+    base_url: "https://footballapi.pulselive.com/football"
+
+# Model Configuration
+models:
+  player_prediction:
+    algorithms:
+      - "xgboost"
+      - "lightgbm" 
+      - "random_forest"
+      - "lstm"
+    
+    features:
+      basic:
+        - "minutes_played"
+        - "goals_scored"
+        - "assists"
+        - "clean_sheets"
+        - "goals_conceded"
+        - "yellow_cards"
+        - "red_cards"
+        - "bonus_points"
+        - "bps"  # Bonus Points System
+      
+      advanced:
+        - "expected_goals"
+        - "expected_assists"
+        - "expected_goals_conceded"
+        - "shots"
+        - "shots_on_target"
+        - "key_passes"
+        - "big_chances_created"
+        - "big_chances_missed"
+        - "saves"
+        - "penalties_saved"
+      
+      form:
+        - "form_5_games"
+        - "form_10_games"
+        - "home_away_split"
+        - "recent_minutes"
+        - "injury_risk"
+      
+      opposition:
+        - "opponent_strength"
+        - "opponent_goals_conceded"
+        - "opponent_clean_sheets"
+        - "fixture_difficulty"
+    
+    hyperparameters:
+      xgboost:
+        n_estimators: 100
+        max_depth: 6
+        learning_rate: 0.1
+        subsample: 0.8
+        colsample_bytree: 0.8
+      
+      lightgbm:
+        n_estimators: 100
+        max_depth: 6
+        learning_rate: 0.1
+        num_leaves: 31
+  
+  ensemble:
+    method: "weighted_average"
+    weights:
+      xgboost: 0.35
+      lightgbm: 0.35
+      random_forest: 0.20
+      lstm: 0.10
+
+# Feature Engineering
+feature_engineering:
+  rolling_windows: [3, 5, 8, 10]  # gameweeks
+  
+  form_metrics:
+    recent_form_weight: 0.6
+    season_form_weight: 0.4
+  
+  fixture_analysis:
+    difficulty_ratings: [1, 2, 3, 4, 5]  # FPL's system
+    home_advantage: 0.1  # 10% boost for home games
+    
+  opposition_strength:
+    metrics:
+      - "goals_scored_avg"
+      - "goals_conceded_avg"
+      - "clean_sheets_percentage"
+      - "expected_goals_for"
+      - "expected_goals_against"
+
+# Optimization Settings
+optimization:
+  team_selection:
+    strategy: "balanced"  # balanced, attack, defense
+    risk_tolerance: "medium"  # low, medium, high
+    
+  captain_selection:
+    min_ownership_differential: 0.05  # 5% below average for differential
+    safe_captain_threshold: 0.15  # 15%+ ownership = safe
+    
+  transfer_strategy:
+    hit_threshold: 6  # take -4 hit if expecting 6+ point gain
+    bank_transfer_threshold: 2  # bank if best transfer gains <2 points
+    
+  bench_strategy:
+    playing_bench_budget: 15.0  # £15m for playing bench
+    fodder_budget: 12.0  # £12m for non-playing bench
+
+# Price Change Prediction
+price_changes:
+  thresholds:
+    rise_threshold: 100  # net transfers in (simplified)
+    fall_threshold: -100  # net transfers out
+  
+  factors:
+    ownership_change_weight: 0.4
+    performance_weight: 0.3
+    fixture_weight: 0.2
+    news_sentiment_weight: 0.1
+
+# Data Collection
+data_collection:
+  update_frequency: "daily"
+  gameweek_update_time: "Tuesday 11:30"  # after deadline
+  
+  cache_duration:
+    bootstrap_data: 3600  # 1 hour
+    player_data: 1800     # 30 minutes
+    fixture_data: 7200    # 2 hours
+  
+  retry_config:
+    max_retries: 3
+    backoff_factor: 2
+    timeout: 30
+
+# Logging & Monitoring
+logging:
+  level: "INFO"
+  format: "{time:YYYY-MM-DD HH:mm:ss} | {level} | FPL-AI | {message}"
+  
+  files:
+    data_collection: "logs/fpl_data.log"
+    model_training: "logs/fpl_models.log"
+    predictions: "logs/fpl_predictions.log"
+    optimization: "logs/fpl_optimization.log"
+
+# Performance Tracking
+performance_metrics:
+  player_prediction:
+    - "r2_score"
+    - "mean_absolute_error"
+    - "correlation"
+    - "accuracy_within_2_points"
+  
+  team_optimization:
+    - "weekly_points"
+    - "overall_rank"
+    - "gameweek_rank"
+    - "transfer_efficiency"
+  
+  captain_selection:
+    - "captain_points_percentage"
+    - "differential_success_rate"
+
+# Web Interface Settings
+web_interface:
+  port: 8502
+  title: "FPL AI Assistant"
+  
+  features:
+    player_predictor: true
+    team_optimizer: true
+    captain_advisor: true
+    transfer_planner: true
+    fixture_analyzer: true
+    price_predictor: true
+  
+  refresh_intervals:
+    live_scores: 60      # seconds
+    player_data: 300     # 5 minutes
+    predictions: 1800    # 30 minutes
+
+# Gameweek Calendar (2025-26 season)
+season_calendar:
+  season_start: "2025-08-15"  # Estimated start date for 2025-26
+  season_end: "2026-05-24"    # Estimated end date
+  total_gameweeks: 38
+  
+  key_dates:
+    wildcard_1_deadline: "2025-09-12"  # After GW4 (estimated)
+    wildcard_2_available: "2026-01-01"  # January transfer window
+    
+  double_gameweeks: []  # TBD - usually around GW25-35
+  blank_gameweeks: []   # TBD - cup fixtures and rearranged matches
