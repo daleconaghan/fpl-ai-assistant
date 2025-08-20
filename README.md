@@ -1,6 +1,31 @@
 # ⚽ FPL AI Assistant
 
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-red.svg)](https://streamlit.io)
+[![XGBoost](https://img.shields.io/badge/XGBoost-ML-green.svg)](https://xgboost.readthedocs.io)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 An AI-powered Fantasy Premier League assistant that predicts player performance, optimizes team selection, and provides data-driven insights for FPL success.
+
+## 🚀 **Live Demo**
+```bash
+git clone https://github.com/YOUR_USERNAME/fpl-ai-assistant.git
+cd fpl-ai-assistant
+pip install -r requirements.txt
+streamlit run app.py
+```
+*Then visit `http://localhost:8502` to see the magic!* ✨
+
+## 📸 **Screenshots**
+
+### 🔮 AI Player Predictions
+![Player Predictions](https://via.placeholder.com/800x400/000000/FFFFFF?text=Player+Predictions+Page)
+
+### 🎯 Team Optimizer  
+![Team Optimizer](https://via.placeholder.com/800x400/000000/FFFFFF?text=Team+Optimization+Page)
+
+### 👑 Captain Analysis
+![Captain Analysis](https://via.placeholder.com/800x400/000000/FFFFFF?text=Captain+Analysis+Page)
 
 ## 🎯 Features
 
@@ -186,3 +211,93 @@ Access at: `http://localhost:8502` (after running app)
 - **Mini-League Analysis**: Beat your friends
 
 This FPL AI Assistant will give you a competitive edge in the world's most popular fantasy football game!
+
+## 🔧 **Installation**
+
+### Prerequisites
+- Python 3.8 or higher
+- pip package manager
+
+### Quick Setup
+```bash
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/fpl-ai-assistant.git
+cd fpl-ai-assistant
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the web interface
+streamlit run app.py
+```
+
+### Development Setup
+```bash
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run tests (if available)
+pytest tests/
+```
+
+## 🎮 **Usage Examples**
+
+### Generate AI Predictions
+```bash
+python scripts/train_fpl_models.py --predict --top 50
+```
+
+### Optimize Team for Gameweek
+```bash
+python scripts/optimize_fpl_team.py --formation "3-5-2" --budget 100.0
+```
+
+### Launch Web Interface
+```bash
+streamlit run app.py
+# Visit http://localhost:8502
+```
+
+## 🤝 **Contributing**
+
+We welcome contributions! Here's how you can help:
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
+
+### Development Guidelines
+- Follow PEP 8 style guidelines
+- Add docstrings to all functions
+- Include unit tests for new features
+- Update documentation as needed
+
+## 📜 **License**
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 **Acknowledgments**
+
+- **Fantasy Premier League** for providing the official API
+- **Streamlit** team for the amazing web framework
+- **XGBoost** developers for the powerful ML library
+- **FPL Community** for inspiration and feedback
+
+## ⭐ **Show Your Support**
+
+If this project helped improve your FPL rank, please give it a ⭐!
+
+## 📞 **Contact**
+
+- **Issues**: [GitHub Issues](https://github.com/YOUR_USERNAME/fpl-ai-assistant/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/YOUR_USERNAME/fpl-ai-assistant/discussions)
+
+---
+
+**Made with ❤️ for the FPL community** | **May your rank be ever green! 📈**
